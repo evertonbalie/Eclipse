@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="content-wrapper" layout:fragment="corpo">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Estrutura do Produto</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Cálculo Projeto</a></li>
+                        <li class="breadcrumb-item active">Estrutura Produto</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+            <div th:replace="fragments/alert"></div>
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title">Estrutura do Produto</h3>
+                        </div>
+
+
+                        <div class="modal fade" id="novo-produto-estruturado">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Editar usuário</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <!-- form start -->
+                                            <form role="form" th:action="@{/admin/usuarios/editar}" th:object="${usuario}" method="POST">
+                                                <div class="box-body">
+                                                    <div class="row">
+                                                        <div class="form-group col-md-4">
+                                                            <label for="nome">Produto Estruturado</label>
+                                                            <input type="text" class="form-control nome" id="nome" name="nome" placeholder="Nome">
+                                                        </div>
+                                                        <div class="form-group col-md-12">
+                                                            <label for="email">Co</label>
+                                                            <input type="email" class="form-control email" id="email" name="email" placeholder="Email">
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label for="usuario">Usuário</label>
+                                                            <input type="text" class="form-control login" id="usuario" name="usuario" placeholder="Usuário" disabled>
+                                                            <input class="form-control login" id="usuario" name="usuario" placeholder="Usuário" type="hidden">
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label for="senha">Senha</label>
+                                                            <input type="password" class="form-control" id="senha" name="senha" placeholder="Senha">
+                                                        </div>
+
+                                                        <div class="form-group col-md-6">
+                                                            <label for="nomePermissao">Perfil</label>
+                                                            <th:block th:each="permissao, stat : ${permissoes}">
+                                                                <div class="checkbox">
+                                                                    <label th:for="${__${permissao.nomePermissao}__}">
+                                                                        <input type="checkbox" th:id="${__${permissao.nomePermissao}__}" th:name="|permissoes[${stat.index}]|" th:value="${permissao.nomePermissao}">
+                                                                        <span th:text="${#strings.substringAfter(permissao.nomePermissao,'_')}">...</span>
+                                                                    </label>
+                                                                </div>
+                                                            </th:block>
+                                                        </div>
+
+                                                        <div class="form-group col-md-6">
+                                                            <label for="ativo">Ativo?</label>
+                                                            <div class="radio">
+                                                                <label>
+                                                                    <input type="radio" class="ativo" name="ativo" id="ativo" value=true checked>
+                                                                    Sim
+                                                                </label>
+                                                                <label>
+                                                                    <input type="radio" class="ativo" name="ativo" id="ativo" value=false>
+                                                                    Não
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+                                            <button type="submit" class="btn btn-primary">Salvar</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                        </div>
+                        <!-- /.modal -->
+
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div >
+                                                    <button class="btn btn-info text-white" role="button" data-toggle="modal" data-target="#novo-produto-estruturado"><i class="fas fa-file"></i> Novo produto estruturado</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table id="example2" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Usuário</th>
+                                                <th>Nome</th>
+                                                <th>Ativo</th>
+                                                <th>Usuário Winthor</th>
+                                                <th>RCA</th>
+                                                <th>Permissão</th>
+                                                <th>Ações</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="user : ${usuarios}">
+                                                <td th:text="${user.usuario}">Trident</td>
+                                                <td th:text="${user.nome}">Internet Explorer 4.0</td>
+                                                <td>
+                                                    <span th:if="${user.ativo}" class="badge badge-success" >Ativo</span>
+                                                    <span th:unless="${user.ativo}" class="badge badge-danger" >Inativo</span>
+                                                </td>
+                                                <td th:text="${user.usuarioWinthor}">Internet Explorer 4.0</td>
+                                                <td th:text="${user.codigoRca}">Internet Explorer 4.0</td>
+                                                <td>
+                                                    <span th:each="permissoes : ${user.permissoes}" th:text="${#strings.substringAfter(permissoes.nomePermissao,'_')}"></span>
+                                                </td>
+                                                <td>
+                                                        <a th:href="@{/admin/usuarios/edicao/}+${user.usuario}" class="btn btn-xs btn-warning text-white" title="Editar Usuário"><i class="fa fa-edit"></i></a>
+                                                        <a th:if="${user.ativo}" th:href="@{/admin/usuarios/inativar/}+${user.usuario}" class="btn btn-xs btn-danger text-white" title="Inativar Usuário"><i class="fa fa-unlink"></i></a>
+                                                        <a th:unless="${user.ativo}" th:href="@{/admin/usuarios/ativar/}+${user.usuario}" class="btn btn-xs btn-success text-white" title="Ativar Usuário"><i class="fa fa-link"></i></a>
+                                                        <a th:href="@{/admin/usuarios/resetarsenha/}+${user.usuario}" target="_self" class="btn btn-xs btn-primary text-white" title="Resetar Senha"><i class="fa fa-lock"></i></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+</body>

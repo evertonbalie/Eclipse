@@ -1,0 +1,15 @@
+	<div th:if="${success} != null">
+		<div class="alert alert-success alert-dismissible">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<h5><i class="icon fas fa-check"></i> Sucesso!</h5>
+			<strong th:text="${success}"></strong>
+		</div>
+	</div>
+	
+	<div th:if="${fail} != null">
+		<div class="alert alert-success alert-dismissible">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<h5><i class="icon fas fa-check"></i> Falha!</h5>
+			<strong th:text="${fail}"></strong>
+		</div>
+	</div>

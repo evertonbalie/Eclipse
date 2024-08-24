@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Aço Pará - Rotinas Web Winthor</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" th:href="@{/plugins/fontawesome-free/css/all.min.css}">
+  <!-- Ionicons -->
+  <link rel="stylesheet" th:href="@{https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css}">
+  <!-- Tempusdominus Bbootstrap 4 -->
+  <link rel="stylesheet" th:href="@{/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css}">
+  <!-- Select2 -->
+  <link rel="stylesheet" th:href="@{/plugins/select2/css/select2.min.css}">
+  <link rel="stylesheet" th:href="@{/plugins/c3.js/c3.min.css}">
+  <link rel="stylesheet" th:href="@{/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css}">
+  <!-- iCheck -->
+  <link rel="stylesheet" th:href="@{/plugins/icheck-bootstrap/icheck-bootstrap.min.css}">
+  <!-- JQVMap -->
+  <link rel="stylesheet" th:href="@{/plugins/jqvmap/jqvmap.min.css}">
+  <!-- Theme style -->
+  <link rel="stylesheet" th:href="@{/dist/css/adminlte.css}">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" th:href="@{/plugins/overlayScrollbars/css/OverlayScrollbars.min.css}">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" th:href="@{/plugins/daterangepicker/daterangepicker.css}">
+  <!-- summernote -->
+  <link rel="stylesheet" th:href="@{/plugins/summernote/summernote-bs4.css}">
+
+  <!-- Google Font: Source Sans Pro -->
+  <link th:href="@{https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700}" rel="stylesheet">
+  <!-- DataTables -->
+  <link rel="stylesheet" th:href="@{/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}">
+  <link rel="stylesheet" th:href="@{/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}">
+  <link rel="stylesheet" th:href="@{/plugins/datatables-buttons/css/buttons.bootstrap4.min.css}">
+</head>
+<body class="hold-transition sidebar-mini layout-navbar-fixed accent-blue">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+  <header th:replace="fragments/admin-header :: cabecalho-admin"> </header>
+  
+  <!-- Left side column. contains the logo and sidebar -->
+  <aside th:replace="fragments/admin-side :: sidebar-admin"> </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+
+  <div layout:fragment="corpo">container</div>
+
+  
+  <footer th:replace="fragments/admin-footer :: rodape-admin"> </footer>
+
+</div>
+<div class="modal fade" id="modal-senha" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Buscar CEP</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form role="form" th:action="@{/admin/usuarios/alterarsenha}" method="POST">
+          <div class="form-group col-md-12">
+            <label for="senha">Senha</label>
+            <input type="password" class="form-control" id="senha" name="senha" placeholder="Senha">
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-buscacep" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Alterar Senha</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="form-group col-md-12">
+            <label for="logradouro">Endereço</label>
+            <input type="text" class="form-control" id="logradouro" name="logradouro" placeholder="Endereço">
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-md-4">
+            <label for="estado">Estado</label>
+            <input type="text" class="form-control" id="estado" name="estado" placeholder="Ex: PA" maxlength="2">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="localidade">Cidade</label>
+            <input type="text" class="form-control" id="localidade" name="localidade" placeholder="Ex: Ananindeua">
+          </div>
+          <div class="form-group col-md-2">
+            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <button type="button" onclick="buscarcep()" class="btn btn-primary">Buscar Cep</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <table id="example2" class="table table-bordered table-hover table-sm">
+              <thead>
+                <tr>
+                  <th>CEP</th>
+                  <th>Endereço</th>
+                  <th>Bairro</th>
+                  <th>UF</th>
+                  <th>Cidade</th>
+                </tr>
+              </thead>
+              <tbody id="tabela">
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal-buscacep2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Buscar CEP</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="form-group col-md-12">
+            <label for="logradouro2">Endereço</label>
+            <input type="text" class="form-control" id="logradouro2" name="logradouro2" placeholder="Endereço">
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group col-md-4">
+            <label for="estado2">Estado</label>
+            <input type="text" class="form-control" id="estado2" name="estado2" placeholder="Ex: PA" maxlength="2">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="localidade2">Cidade</label>
+            <input type="text" class="form-control" id="localidade2" name="localidade2" placeholder="Ex: Ananindeua">
+          </div>
+          <div class="form-group col-md-2 align-text-bottom">
+            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <button type="button" onclick="buscarcep2()" class="btn btn-primary">Buscar Cep</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <table id="example1" class="table table-bordered table-hover table-sm">
+              <thead>
+              <tr>
+                <th>CEP</th>
+                <th>Endereço</th>
+                <th>Bairro</th>
+                <th>UF</th>
+                <th>Cidade</th>
+              </tr>
+              </thead>
+              <tbody id="tabela2">
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<script th:src="@{/plugins/jquery/jquery.min.js}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script th:src="@{/plugins/jquery-ui/jquery-ui.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script th:src="@{/plugins/bootbox/bootbox.all.js}"></script>
+<script>
+  $.widget.bridge('uibutton', $.ui.button)
+</script>
+
+<!-- DataTables -->
+<script th:src="@{/plugins/datatables/jquery.dataTables.js}"></script>
+<script th:src="@{/plugins/datatables-bs4/js/dataTables.bootstrap4.js}"></script>
+<!-- Select2 -->
+<script th:src="@{/plugins/select2/js/select2.full.min.js}"></script>
+<!-- ChartJS -->
+<script th:src="@{/plugins/chart.js/Chart.min.js}"></script>
+<!-- D3.JS -->
+<script th:src="@{/plugins/d3.js/d3.min.js}" charset="utf-8"></script>
+<!-- C3.JS -->
+<script th:src="@{/plugins/c3.js/c3.min.js}"></script>
+<!-- Sparkline -->
+<script th:src="@{/plugins/sparklines/sparkline.js}"></script>
+<!-- JQVMap -->
+<script th:src="@{/plugins/jqvmap/jquery.vmap.min.js}"></script>
+<script th:src="@{/plugins/jqvmap/maps/jquery.vmap.usa.js}"></script>
+<!-- jQuery Knob Chart -->
+<script th:src="@{/plugins/jquery-knob/jquery.knob.min.js}"></script>
+<!-- daterangepicker -->
+<script th:src="@{/plugins/moment/moment.min.js}"></script>
+<script th:src="@{/plugins/daterangepicker/daterangepicker.js}"></script>
+<script th:src="@{/plugins/inputmask/min/jquery.inputmask.bundle.min.js}"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script th:src="@{/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js}"></script>
+<!-- Summernote -->
+<script th:src="@{/plugins/summernote/summernote-bs4.min.js}"></script>
+<!-- overlayScrollbars -->
+<script th:src="@{/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/dist/js/adminlte.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/dist/js/acopara.js}"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script th:src="@{/dist/js/pages/dashboard.js}"></script>
+<!-- AdminLTE for demo purposes -->
+<script th:src="@{/dist/js/demo.js}"></script>
+<script>
+  $(document).ready(function () {
+    $("input[type=text]").keyup(function () {
+      $(this).val($(this).val().toUpperCase());
+    });
+  });
+  
+  $(function () {
+    //Initialize Select2 Elements
+    $('.select2').select2({
+      theme: 'bootstrap4'
+    })
+
+    //Datemask dd/mm/yyyy
+    $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+    //Datemask2 mm/dd/yyyy
+    $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+    //Money Euro
+    $('[data-mask]').inputmask()
+
+    //Date range picker
+    $('#reservation').daterangepicker()
+    //Date range picker with time picker
+    $('#reservationtime').daterangepicker({
+      timePicker: true,
+      timePickerIncrement: 30,
+      locale: {
+        format: 'MM/DD/YYYY hh:mm A'
+      }
+    })
+    //Date range as a button
+    $('#daterange-btn').daterangepicker(
+            {
+              ranges   : {
+                'Today'       : [moment(), moment()],
+                'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+                'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+              },
+              startDate: moment().subtract(29, 'days'),
+              endDate  : moment()
+            },
+            function (start, end) {
+              $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+            }
+    )
+
+    //Timepicker
+   // $('#timepicker').datetimepicker({
+   //   format: 'LT'
+   // })
+
+    //Bootstrap Duallistbox
+    //$('.duallistbox').bootstrapDualListbox()
+
+    //Colorpicker
+    //$('.my-colorpicker1').colorpicker()
+    //color picker with addon
+    //$('.my-colorpicker2').colorpicker()
+
+    //$('.my-colorpicker2').on('colorpickerChange', function(event) {
+      //$('.my-colorpicker2 .fa-square').css('color', event.color.toString());
+    //});
+
+    //$("input[data-bootstrap-switch]").each(function(){
+    //  $(this).bootstrapSwitch('state', $(this).prop('checked'));
+    //});
+
+  })
+</script>
+
+<script>
+  $(function () {
+    $('#example2,#exemple1').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "language": {
+        "sEmptyTable": "Nenhum registro à exibir",
+        "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+        "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+        "sInfoPostFix": "",
+        "sInfoThousands": ".",
+        "sLengthMenu": "_MENU_ resultados por página",
+        "sLoadingRecords": "Carregando...",
+        "sProcessing": "Processando...",
+        "sZeroRecords": "Nenhum registro encontrado",
+        "sSearch": "Pesquisar",
+        "oPaginate": {
+          "sNext": "Próximo",
+          "sPrevious": "Anterior",
+          "sFirst": "Primeiro",
+          "sLast": "Último"
+        },
+        "oAria": {
+          "sSortAscending": ": Ordenar colunas de forma ascendente",
+          "sSortDescending": ": Ordenar colunas de forma descendente"
+        },
+        "select": {
+          "rows": {
+            "_": "Selecionado %d linhas",
+            "0": "Nenhuma linha selecionada",
+            "1": "Selecionado 1 linha"
+          }
+        }
+      }
+    });
+  });
+</script>
+
+<script>
+  $(document).ready(function () {
+    $("input[type=text]").keyup(function () {
+      $(this).val($(this).val().toUpperCase());
+    });
+  });
+</script>
+<script th:inline="javascript">
+  var metamespercent = [[${#numbers.formatDecimal(dash.percentmetames,1,2, 'POINT')}]];
+
+  var metadiapercent = [[${#numbers.formatDecimal(dash.percentmetadia,1,2, 'POINT')}]];
+
+  var vendames = [[${dash.vlvendames}]];
+
+  var metames = [[${dash.metames}]];
+
+  var vendadia = [[${dash.vlvendadia}]];
+
+  var metadia = [[${dash.metadia}]];
+
+  console.log("log", vendames);
+
+
+  var chartMetaMes = c3.generate({
+    bindto: '#metames',
+    data: {
+      columns: [
+        ['% Meta Mês', metamespercent]
+      ],
+      type: 'gauge',
+      onclick: function (d, i) { console.log("onclick", d, i); },
+      onmouseover: function (d, i) { console.log("onmouseover", d, i); },
+      onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+    },
+    gauge: {
+        label: {
+            format: function(value, ratio) {
+                return value;
+            },
+            show: true // to turn off the min/max labels.
+        },
+//    min: 0, // 0 is default, //can handle negative min e.g. vacuum / voltage / current flow / rate of change
+//    max: 100, // 100 is default
+    units: ' %',
+    width: 39 // for adjusting arc thickness
+    },
+    color: {
+      pattern: ['#FF0000', '#F97600', '#F6C600', '#60B044'], // the three color levels for the percentage values.
+      threshold: {
+//            unit: 'value', // percentage is default
+//            max: metames, // 100 is default
+        values: [30, 60, 90, 100]
+      }
+    },
+    size: {
+      height: 180
+
+    }
+  });
+
+  var chartMetaDia = c3.generate({
+    bindto: '#metadia',
+    data: {
+      columns: [
+        ['% Meta Dia', metadiapercent]
+      ],
+      type: 'gauge',
+      onclick: function (d, i) { console.log("onclick", d, i); },
+      onmouseover: function (d, i) { console.log("onmouseover", d, i); },
+      onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+    },
+    gauge: {
+      label: {
+        format: function(value, ratio) {
+          return value;
+        },
+        show: true // to turn off the min/max labels.
+      },
+//    min: 0, // 0 is default, //can handle negative min e.g. vacuum / voltage / current flow / rate of change
+//    max: 100, // 100 is default
+      units: ' %',
+      width: 39 // for adjusting arc thickness
+    },
+    color: {
+      pattern: ['#FF0000', '#F97600', '#F6C600', '#60B044'], // the three color levels for the percentage values.
+      threshold: {
+//            unit: 'value', // percentage is default
+//           max: metadia, // 100 is default
+        values: [30, 60, 90, 100]
+      }
+    },
+    size: {
+      height: 180
+    }
+  });
+
+  var ctx = document.getElementById('metames2');
+  var myChart = new Chart(ctx, {
+    type: 'horizontalBar',
+    data: {
+      datasets: [
+        {
+          label: 'Venda em R$',
+          data: [vendames],
+          backgroundColor: ['#007bff'],
+          borderWidth: 1
+        },
+        {
+          label: 'Meta em R$',
+          data: [metames],
+          backgroundColor: ['#F6C600'],
+          borderWidth: 1
+        }]
+    },
+    options: {
+      scales: {
+        xAxes: [{
+          ticks: {
+            beginAtZero: true,
+            callback: function (value, index, values) {
+              if (value >= 1000) {
+                value /= 1000
+                value += ' mil'
+              }
+              return 'R$ ' + value
+            }
+          }
+        }]
+      }
+    }
+  });
+
+  var ctx = document.getElementById('metadia2');
+  var myChart = new Chart(ctx, {
+    type: 'horizontalBar',
+    data: {
+      datasets: [
+        {
+          label: 'Venda em R$',
+          data: [vendadia],
+          backgroundColor: ['#007bff'],
+          borderWidth: 1
+        },
+        {
+          label: 'Meta em R$',
+          data: [metadia],
+          backgroundColor: ['#F6C600'],
+          borderWidth: 1
+        }]
+    },
+    options: {
+      scales: {
+        xAxes: [{
+          ticks: {
+            beginAtZero: true,
+            callback: function (value, index, values) {
+              if (value >= 1000) {
+                value /= 1000
+                value += ' mil'
+              }
+              return 'R$ ' + value
+            }
+          }
+        }]
+      }
+    }
+  });
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	  layout:decorate="~{layout}">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	<div class="content-wrapper" layout:fragment="corpo">
+		<!-- Content Header (Page header) -->
+		<div class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<h1 class="m-0 text-dark">Usuários</h1>
+					</div><!-- /.col -->
+					<div class="col-sm-6">
+						<ol class="breadcrumb float-sm-right">
+							<li class="breadcrumb-item"><a href="#">Admin</a></li>
+							<li class="breadcrumb-item active">Cadastro de Usuários</li>
+						</ol>
+					</div><!-- /.col -->
+				</div><!-- /.row -->
+				<div th:replace="fragments/alert"></div>
+			</div><!-- /.container-fluid -->
+		</div>
+		<!-- /.content-header -->
+
+		<!-- Main content -->
+		<div class="content">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card card-default">
+							<div class="card-header">
+								<h3 class="card-title">Editar Usuário</h3>
+
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-12">
+										<form th:action="@{/admin/usuarios/editar}" th:object="${usuario}" method="POST">
+											<small class="help-block text-red">Campos com (*) são obrigatórios</small>
+											<div class="row">
+												<div class="form-group col-md-2">
+													<label for="usuario">Usuário Winthor</label>
+													<select class="select2 form-control" id="usuario" name="usuario" data-placeholder="Selecione a Cidade" style="width: 100%;">
+														<option>Selecione Usuário Winthor</option>
+														<option th:each="usuario : ${usuarioWinthor}" th:value="${usuario.usuario}" th:text="${usuario.usuario}" th:field="*{usuario}">Alabama</option>
+													</select>
+												</div>
+												<div class="form-group col-md-4">
+													<label for="nome">Nome Usuário<small class="text-red">*</small></label>
+													<input type="text" class="form-control" id="nomeH" name="nomeH" placeholder="Nome Usuário" disabled="disabled" th:field="*{nome}">
+													<input type="hidden" class="form-control" id="nome" name="nome" placeholder="Nome Usuário" th:field="*{nome}">
+												</div>
+												<div class="form-group col-md-1">
+													<label for="usuarioWinthor">Código<small class="text-red">*</small></label>
+													<input type="text" class="form-control" id="usuarioWinthorH" name="usuarioWinthorH" disabled="disabled" th:field="*{usuarioWinthor}">
+													<input type="hidden" class="form-control" id="usuarioWinthor" name="usuarioWinthor" th:field="*{usuarioWinthor}">
+												</div>
+												<div class="form-group col-md-1">
+													<label for="codigoRca">RCA<small class="text-red">*</small></label>
+													<input type="text" class="form-control" id="codigoRcaH" name="codigoRcaH" disabled="disabled" th:field="*{codigoRca}">
+													<input type="hidden" class="form-control" id="codigoRca" name="codigoRca" th:field="*{codigoRca}" >
+												</div>
+													<input type="hidden" class="form-control" id="ativo" name="ativo" value="true" th:field="*{ativo}">
+												<div class="form-group col-md-2">
+													<label for="codigoSupervisor">É Supervisor</label>
+													<select class="select2 form-control" id="codigoSupervisor" name="codigoSupervisor" data-placeholder="Selecione o Supervisor" style="width: 100%;">
+														<option value=0>NÃO É SUPERVISOR</option>
+														<option th:each="loja : ${lojas}" th:value="${loja.id}" th:text="${loja.nome}" th:field="*{codigoSupervisor}">Alabama</option>
+													</select>
+												</div>
+												<div class="form-group col-md-2">
+													<label for="permissoes">Permissão</label>
+													<select class="select2 form-control" id="permissoes" name="permissoes" data-placeholder="Selecione a permissão" style="width: 100%;" multiple="multiple">
+														<option>Selecione a permissão</option>
+														<option th:each="per : ${permissoes}" th:value="${per.nomePermissao}" th:text="${#strings.substringAfter(per.nomePermissao,'_')}" th:field="*{permissoes}">Alabama</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="card-footer">
+												<button type="submit" class="btn btn-success float-right"><i class="fas fa-save"></i> Salvar</button>
+											</div>
+										</form>
+									</div>
+									<!-- /.col -->
+								</div>
+							</div>
+							<!-- /.card-body -->
+						</div>
+						<!-- /.card -->
+					</div>
+
+				</div>
+				<!-- /.row -->
+			</div>
+			<!-- /.container-fluid -->
+		</div>
+		<!-- /.content -->
+	</div>
+	<!-- /.content-wrapper -->
+</body>
+</html>

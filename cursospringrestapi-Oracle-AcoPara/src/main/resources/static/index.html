@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+</head>
+<body>
+<form action="" id="formCadastroUser">
+
+<div class="mb-3">
+  <label for="exampleFormControlInput1" class="form-label">Matrícula</label>
+  <input type="number" class="form-control" id="matricula"  >
+</div>
+
+<div class="mb-3">
+  <label for="exampleFormControlInput1" class="form-label">Nome</label>
+  <input type="text" class="form-control" id="nome" placeholder="Informe o Nome">
+</div>
+
+
+<div class="mb-3">
+  <label for="exampleFormControlInput1" class="form-label">Nome Usuário</label>
+  <input type="text" class="form-control" id="nomeUsuario" placeholder="Informe o Nome_Usuário">
+</div>
+
+<div class="mb-3">
+  <label for="exampleFormControlInput1" class="form-label">Cód. Setor</label>
+  <input type="text" class="form-control" id="codigoSetor" placeholder="Informe o Cod. Setor">
+</div>
+
+<div class="mb-3">
+  <label for="exampleFormControlInput1" class="form-label">Cpf</label>
+  <input type="text" class="form-control" id="cpf" placeholder="Nome">
+</div>
+
+
+</form>
+<button type="submit" class="btn btn-primary" onclick="salvarUsuario()">Salvar</button>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+function salvarUsuario(){
+	var matricula = $("#matricula").val();
+	var nome = $("#nome").val();
+	var nome_guerra = $("#nomeUsuario").val();
+	var codsetor = $("#codigoSetor").val();
+	var cpf=$("#cpf").val();
+	
+	
+	$.ajax({
+		
+		method:"PUT",
+		url:"/api/app/atualiza",
+		body:JSON.stringify({matricula:matricula, nome:nome,nome_guerra:nome_guerra,codsetor:codigoSetor,cpf:cpf}),
+		contentType:"applicatio9n/json; charset=utf-8",
+		success: function(response){
+			alert("gravou com sucesso!");
+			
+		}
+	
+	}).fail(function (xhr, status,errThrow){
+		
+		alert("Erro ao salvar usuário"+xhr.responseText);
+	});
+	
+// 	alert(id+"-"+nome+"-"+nomeUsuario+"-"+codSetor+"-"+cpf);
+
+}
+
+</script>
+
+</body>
+</html>

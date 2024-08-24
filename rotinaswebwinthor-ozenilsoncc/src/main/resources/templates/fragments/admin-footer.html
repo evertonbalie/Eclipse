@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<footer class="main-footer" th:fragment="rodape-admin">
+		<div class="float-right d-none d-sm-block">
+			<b>Versão</b> 2.0.25
+		</div>
+		<strong>Copyright &copy; 2019-<span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span> <a href="http://acopara.net.br">Aço Pará - Tecnologia da Informação</a>.</strong> Todos os direitos reservados
+	</footer>
+</body>
+</html>

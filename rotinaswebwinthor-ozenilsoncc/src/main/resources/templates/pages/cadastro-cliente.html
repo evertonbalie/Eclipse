@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	  layout:decorate="~{layout}">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	<div class="content-wrapper" layout:fragment="corpo">
+		<!-- Content Header (Page header) -->
+		<div class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<h1 class="m-0 text-dark">Clientes</h1>
+					</div><!-- /.col -->
+					<div class="col-sm-6">
+						<ol class="breadcrumb float-sm-right">
+							<li class="breadcrumb-item"><a href="#">Vendas</a></li>
+							<li class="breadcrumb-item active">Cadastro de Clientes</li>
+						</ol>
+					</div><!-- /.col -->
+				</div><!-- /.row -->
+				<div th:replace="fragments/alert"></div>
+			</div><!-- /.container-fluid -->
+		</div>
+		<!-- /.content-header -->
+
+		<!-- Main content -->
+		<div class="content">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="card card-default">
+							<div class="card-header">
+								<h3 class="card-title">Cadastro de Cliente</h3>
+
+							</div>
+							<div class="card-body">
+								<div class="row">
+									<div class="col-md-12">
+										<form method="POST" th:action="@{/vendas/cliente/salvar}" th:object="${cliente}">
+											<small class="help-block text-red">Campos com (*) são obrigatórios</small>
+											<div class="row">
+												<div class="form-group col-md-2">
+													<label for="cpfCnpj">CPF <small class="text-red">*</small></label>
+													<input type="text" class="form-control cpf" id="cpfCnpj" th:field="*{cpfCnpj}" placeholder="999.999.999-99" required="required" data-inputmask='"mask": "999.999.999-99"' data-mask>
+													<span class="invalid-tooltip" th:if="${#fields.hasErrors('cpfCnpj')}" th:errors="*{cpfCnpj}"></span>
+												</div>
+												<div class="form-group col-md-4">
+													<label for="nome">Nome Completo <small class="text-red">*</small></label>
+													<input type="text" class="form-control" id="nome" th:field="*{nome}" placeholder="Nome Completo" required="required" maxlength="60">
+													<span class="invalid-tooltip" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></span>
+												</div>
+												<div class="form-group col-md-3">
+													<label for="nome">E-mail<small class="text-red">*</small></label>
+													<input type="email" class="form-control" id="email" th:field="*{email}" placeholder="fulano@gmail.com" required="required" maxlength="100">
+													<span class="invalid-tooltip" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+												</div>
+												<div class="form-group col-md">
+													<label for="telefoneEntrega">Telefone</label><label for="telefoneEntrega">Complemento <small class="text-red">*</small></label>
+													<input type="text" class="form-control" id="telefoneEntrega" th:field="*{telefoneEntrega}" data-inputmask='"mask": "99-99999999"' data-mask required="required">
+												</div>
+												<div class="form-group col-md">
+													<label for="celularEntrega">Celular</label><label for="celularEntrega">Complemento <small class="text-red">*</small></label>
+													<input type="text" class="form-control" id="celularEntrega" name="celularEntrega" data-inputmask='"mask": "99-999999999"' data-mask required="required">
+												</div>
+
+											</div>
+											<div class="row">
+												<div class="form-group col-md-2">
+													<label for="cepEntrega">Cep <small class="text-red">*</small></label>
+													<input type="text" class="form-control cep" id="cepEntrega" name="cepEntrega" placeholder="Ex.: 67000000" data-inputmask='"mask": "99999999"' data-mask  required="required" >
+													<button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#modal-buscacep"><i class="fas fa-search"></i> Buscar CEP</button>
+												</div>
+												<div class="form-group col-md-2">
+													<label for="numeroEntrega">Número <small class="text-red">*</small></label>
+													<input type="text" class="form-control" id="numeroEntrega" th:field="*{numeroEntrega}" placeholder="Ex.: 123" required="required" maxlength="6">
+													<span class="invalid-tooltip" th:if="${#fields.hasErrors('numeroEntrega')}" th:errors="*{numeroEntrega}"></span>
+												</div>
+												<div class="form-group col-md-4">
+													<label for="enderecoEntrega">Endereço <small class="text-red">*</small></label>
+													<input type="text" class="form-control" id="enderecoEntrega" th:field="*{enderecoEntrega}" placeholder="Ex.: Avenida Almirante Barrosso" required="required" maxlength="40">
+													<span class="invalid-tooltip" th:if="${#fields.hasErrors('enderecoEntrega')}" th:errors="*{enderecoEntrega}"></span>
+												</div>
+												<div class="form-group col-md-4">
+													<label for="complementoEntrega">Complemento <small class="text-red">*</small></label>
+													<input type="text" class="form-control" id="complementoEntrega" th:field="*{complementoEntrega}" placeholder="Ex.: Edificio Almirante" maxlength="80" required="required">
+													<span class="invalid-tooltip" th:if="${#fields.hasErrors('complementoEntrega')}" th:errors="*{complementoEntrega}"></span>
+												</div>
+												<div class="form-group col-md-3">
+													<label for="bairroEntrega">Bairro <small class="text-red">*</small></label>
+													<input type="text" class="form-control" id="bairroEntrega" th:field="*{bairroEntrega}" placeholder="Ex.: Marco" required="required" maxlength="40">
+													<span class="invalid-tooltip" th:if="${#fields.hasErrors('bairroEntrega')}" th:errors="*{bairroEntrega}"></span>
+												</div>
+												<div class="form-group col-md-1">
+													<label for="ufEntrega">Estado <small class="text-red">*</small></label>
+													<input type="text" class="form-control" id="ufEntrega" th:field="*{ufEntrega}" placeholder="Ex.: PA" required="required" maxlength="2">
+													<span class="invalid-tooltip" th:if="${#fields.hasErrors('ufEntrega')}" th:errors="*{ufEntrega}"></span>
+												</div>
+												<div class="form-group col-md-3">
+													<label for="municipioEntrega">Cidade <small class="text-red">*</small></label>
+													<input type="text" class="form-control" id="municipioEntrega" th:field="*{municipioEntrega}" placeholder="Ex.: Belém"  required="required" maxlength="15">
+													<span class="invalid-tooltip" th:if="${#fields.hasErrors('municipioEntrega')}" th:errors="*{municipioEntrega}"></span>
+													<input type="hidden" id="cidadeIbge" name="cidadeIbge">
+												</div>
+												<div class="form-group col-md-3">
+													<label for="codigoCidade">Cidade IBGE <small class="text-red">*</small></label>
+													<select class="select2 form-control" id="codigoCidade" name="codigoCidade" data-placeholder="Selecione a Cidade" style="width: 100%;" required="required">
+														<option>Selecione Cidade Ibge</option>
+														<option th:each="cidade : ${cidades}" th:value="${cidade.id}" th:text="${cidade.nomeCidade + '(' + cidade.uf + ')'}">Alabama</option>
+													</select>
+												</div>
+												<div class="form-group col-md-2">
+													<label for="codigoPracaEntrega">Praça <small class="text-red">*</small></label>
+													<select class="select2 form-control" id="codigoPracaEntrega" name="codigoPracaEntrega" data-placeholder="Selecione a Praça" style="width: 100%;" required="required">
+														<option>Selecione a praça</option>
+														<option th:each="praca : ${pracas}" th:value="${praca.id}" th:text="${praca.praca}">Alabama</option>
+													</select>
+												</div>
+											</div>
+											<div class="card-footer">
+												<button type="submit" class="btn btn-success float-right"><i class="fas fa-save"></i> Salvar</button>
+											</div>
+										</form>
+									</div>
+									<!-- /.col -->
+								</div>
+							</div>
+							<!-- /.card-body -->
+						</div>
+						<!-- /.card -->
+					</div>
+
+				</div>
+				<!-- /.row -->
+			</div>
+			<!-- /.container-fluid -->
+		</div>
+		<!-- /.content -->
+	</div>
+	<!-- /.content-wrapper -->
+</body>
+</html>

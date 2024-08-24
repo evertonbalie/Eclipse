@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-br"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="content-wrapper" layout:fragment="corpo">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark">Vendas</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Vendas</a></li>
+                        <li class="breadcrumb-item active">Rastreamento</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title">Rastreamento de Entregas</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div id="accordion" th:each="ped : ${pedidos}">
+                                        <!-- we are adding the .class so bootstrap.js collapse plugin detects it -->
+                                        <div class="card card-light">
+                                            <div class="card-header">
+                                                <h4 class="card-title">
+                                                    <i class="fas fa-truck"></i>
+                                                    <a data-toggle="collapse" data-parent="#accordion" th:href="${'#collapse'+ped.pedido}" >
+                                                        <span class="text-bold" th:text="${'Pedido: '+ped.pedido}"></span>
+                                                        <span th:text="${' / '+ped.codcli+' - '+ped.cliente}"></span>
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div th:id="${'collapse'+ped.pedido}" class="panel-collapse collapse in">
+                                                <div class="card-body">
+                                                    <div class="row bs-wizard" style="border-bottom:0;" >
+
+                                                        <div th:class="${ped.horapedido != null} ? (${ped.horaemissaomapa == null} ? 'col bs-wizard-step active' : 'col bs-wizard-step complete') : 'col bs-wizard-step disabled'">
+                                                            <div class="text-center bs-wizard-stepnum text-bold">PEDIDO</div>
+                                                            <div class="progress"><div class="progress-bar"></div></div>
+                                                            <div class="bs-wizard-dot d-flex align-items-center justify-content-center text-white"><i class="fas fa-shopping-cart fa-2x"></i></div>
+                                                            <div class="bs-wizard-info text-center">
+                                                                <div class="info">
+                                                                    <span th:if="${ped.horapedido != null}" th:text="${'Data: ' + #dates.format(ped.horapedido, 'dd/MM/yyyy')}">Data: 08/03/2020</span><br>
+                                                                    <span th:if="${ped.horapedido != null}" th:text="${'Hora: ' + #dates.format(ped.horapedido, 'HH:mm')}">Hora: 15:32:54</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div th:class="${ped.horaemissaomapa != null} ? (${ped.horafaturamento == null} ? 'col bs-wizard-step active' : 'col bs-wizard-step complete') : 'col bs-wizard-step disabled'">
+                                                            <div class="text-center bs-wizard-stepnum text-bold">EM SEPARAÇÃO</div>
+                                                            <div class="progress"><div class="progress-bar"></div></div>
+                                                            <div class="bs-wizard-dot d-flex align-items-center justify-content-center text-white"><i class="fas fa-dolly fa-2x"></i></div>
+                                                            <div class="bs-wizard-info text-center">
+                                                                <div class="info">
+                                                                    <span th:if="${ped.horaemissaomapa != null}" th:text="${'Data: ' + #dates.format(ped.horaemissaomapa, 'dd/MM/yyyy')}">Data: 08/03/2020</span><br>
+                                                                    <span th:if="${ped.horaemissaomapa != null}" th:text="${'Hora: ' + #dates.format(ped.horaemissaomapa, 'HH:mm')}">Hora: 15:32:54</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div th:class="${ped.horafaturamento != null} ? (${ped.preventrega == null} ? 'col bs-wizard-step active' : 'col bs-wizard-step complete') : 'col bs-wizard-step disabled'">
+                                                            <div class="text-center bs-wizard-stepnum text-bold">NFe EMITIDA</div>
+                                                            <div class="progress"><div class="progress-bar"></div></div>
+                                                            <div class="bs-wizard-dot d-flex align-items-center justify-content-center text-white"><i class="fas fa-receipt fa-2x"></i></div>
+                                                            <div class="bs-wizard-info text-center">
+                                                                <div class="info">
+                                                                    <span th:if="${ped.horafaturamento != null}" th:text="${'Data: ' + #dates.format(ped.horafaturamento, 'dd/MM/yyyy')}">Data: 08/03/2020</span><br>
+                                                                    <span th:if="${ped.horafaturamento != null}" th:text="${'Hora: ' + #dates.format(ped.horafaturamento, 'HH:mm')}">Hora: 15:32:54</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div th:class="${ped.preventrega != null} ? (${ped.horaentrega == null} ? 'col bs-wizard-step active' : 'col bs-wizard-step complete') : 'col bs-wizard-step disabled'">
+                                                            <div class="text-center bs-wizard-stepnum text-bold">EM ROTA</div>
+                                                            <div class="progress"><div class="progress-bar"></div></div>
+                                                            <div class="bs-wizard-dot d-flex align-items-center justify-content-center text-white"><i class="fas fa-truck fa-2x"></i></div>
+                                                            <div class="bs-wizard-info text-center">
+                                                                <div class="info">
+                                                                    <span th:if="${ped.ordementrega != null}" th:text="${ped.ordementrega+'ª Entrega da carga: '+ ped.carga}">Hora: 15:32:54</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div th:if="${ped.horaentrega == null}"  th:class="${ped.horaentrega != null} ? (${ped.horaentrega == null} ? 'col bs-wizard-step active' : 'col bs-wizard-step complete') : 'col bs-wizard-step disabled'">
+                                                            <div class="text-center bs-wizard-stepnum text-bold">PREV. ENTREGA</div>
+                                                            <div class="progress"><div class="progress-bar"></div></div>
+                                                            <div class="bs-wizard-dot d-flex align-items-center justify-content-center text-white"><i class="fas fa-thumbs-up fa-2x"></i></div>
+                                                            <div class="bs-wizard-info text-center">
+                                                                <div class="info">
+                                                                    <span th:if="${ped.preventrega != null}" th:text="${'Data: ' + #dates.format(ped.preventrega, 'dd/MM/yyyy')}">Data: 08/03/2020</span><br>
+                                                                    <span th:if="${ped.preventrega != null}" th:text="${'Hora: ' + #dates.format(ped.preventrega, 'HH:mm')}">Hora: 15:32:54</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div th:unless="${ped.horaentrega == null}"  th:class="${ped.horaentrega != null} ? (${ped.horaentrega == null} ? 'col bs-wizard-step active' : 'col bs-wizard-step complete') : 'col bs-wizard-step disabled'">
+                                                            <div class="text-center bs-wizard-stepnum text-bold">ENTREGUE</div>
+                                                            <div class="progress"><div class="progress-bar"></div></div>
+                                                            <div class="bs-wizard-dot d-flex align-items-center justify-content-center text-white"><i class="fas fa-thumbs-up fa-2x"></i></div>
+                                                            <div class="bs-wizard-info text-center">
+                                                                <div class="info">
+                                                                    <span th:if="${ped.horaentrega != null}" th:text="${'Data: ' + #dates.format(ped.horaentrega, 'dd/MM/yyyy')}">Data: 08/03/2020</span><br>
+                                                                    <span th:if="${ped.horaentrega != null}" th:text="${'Hora: ' + #dates.format(ped.horaentrega, 'HH:mm')}">Hora: 15:32:54</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+</body>
